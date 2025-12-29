@@ -1,13 +1,18 @@
-[{
-  "name": "ZXY",
-  "percentage": 100
-}, {
-  "name": "NHY",
-  "percentage": 100
-}, {
-  "name": "ZTH",
-  "percentage": 100
-}, {
-  "name": "YRZ",
-  "percentage": 100
-}]
+[
+  {
+    "name": "ZXY",
+    "percentage": 70
+  },
+  {
+    "name": "NHY",
+    "percentage": 110
+  },
+  {
+    "name": "ZTH",
+    "percentage": 110
+  },
+  {
+    "name": "YRZ",
+    "percentage": 110
+  }
+]
