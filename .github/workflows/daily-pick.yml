@@ -1,0 +1,36 @@
+name: Daily Percentage Picker
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  pick:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run picker
+        run: node scripts/pick.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit updated percentage
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add percentage
+          git commit -m "chore: daily percentage update" || echo "No changes"
+          git push
