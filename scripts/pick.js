@@ -1,6 +1,5 @@
 import fs from "fs";
 import crypto from "crypto";
-import fetch from "node-fetch";
 
 const FILE = "percentage";
 const DATE = new Date().toISOString().slice(0, 10);
