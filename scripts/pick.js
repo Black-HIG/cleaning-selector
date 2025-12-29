@@ -1,7 +1,6 @@
 import fs from "fs";
-import crypto from "crypto";
 
-const FILE = "percentage";
+const FILE = "percentage.json";
 const DATE = new Date().toISOString().slice(0, 10);
 const REPO = process.env.GITHUB_REPOSITORY;
 const TOKEN = process.env.GITHUB_TOKEN;
@@ -18,31 +17,30 @@ function makeRNG(seedStr) {
   };
 }
 
-let people = JSON.parse(fs.readFileSync(FILE, "utf8"));
-people = people.filter(p => p.percentage >= 0);
+const people = JSON.parse(fs.readFileSync(FILE, "utf8"));
 
-if (people.length === 0) {
-  console.log("No valid candidates.");
+const candidates = people.filter(p => p.percentage >= 0);
+
+if (candidates.length === 0) {
+  console.log("No valid candidates today.");
   process.exit(0);
 }
 
 const rng = makeRNG(DATE);
 
-const weights = people.map(p => BigInt(p.percentage));
+const weights = candidates.map(p => BigInt(p.percentage));
 const total = weights.reduce((a, b) => a + b, 0n);
 
 let r = rng() % total;
 
-let chosenIndex = 0;
-for (let i = 0; i < weights.length; i++) {
+let chosen = candidates[0];
+for (let i = 0; i < candidates.length; i++) {
   if (r < weights[i]) {
-    chosenIndex = i;
+    chosen = candidates[i];
     break;
   }
   r -= weights[i];
 }
-
-const chosen = people[chosenIndex];
 
 for (const p of people) {
   if (p.name === chosen.name) {
@@ -69,20 +67,15 @@ ${JSON.stringify(people, null, 2)}
 **Seed**：\`${DATE}\`
 `;
 
-async function createIssue() {
-  const url = `https://api.github.com/repos/${REPO}/issues`;
-
-  await fetch(url, {
-    method: "POST",
-    headers: {
-      "Authorization": `token ${TOKEN}`,
-      "Accept": "application/vnd.github+json"
-    },
-    body: JSON.stringify({
-      title: issueTitle,
-      body
-    })
-  });
-}
-
-createIssue();
+await fetch(`https://api.github.com/repos/${REPO}/issues`, {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${TOKEN}`,
+    "Accept": "application/vnd.github+json",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    title: issueTitle,
+    body
+  })
+});
