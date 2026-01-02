@@ -10,7 +10,7 @@ const people = JSON.parse(fs.readFileSync(FILE, "utf8"));
 const candidates = people.filter(p => p.percentage >= 0);
 
 const weights = candidates.map(p => BigInt(p.percentage));
-const seed2 = weights.reduce((a, b) => a ^ b, 0n);
+const seed2 = weights.reduce((a, b) => (a * 131n + b) | 244n, 0n);
 
 if (candidates.length === 0) {
     console.log("No valid candidates today.");
@@ -33,6 +33,19 @@ function seededRandom(seed) {
 }
 
 const rand = seededRandom(DATE + seed2);
+const rand2 = seededRandom(seed2)
+
+function shuffleWithSeed(arr) {
+  const a = arr.slice();
+
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand2() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+shuffleWithSeed(candidates);
 
 const total = candidates.reduce((sum, p) => sum + p.percentage, 0);
 let r = rand() * total;
