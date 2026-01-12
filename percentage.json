@@ -1,18 +1,18 @@
 [
   {
     "name": "ZXY",
-    "percentage": 150
+    "percentage": 160
   },
   {
     "name": "NHY",
-    "percentage": 110
+    "percentage": 80
   },
   {
     "name": "ZTH",
-    "percentage": 110
+    "percentage": 120
   },
   {
     "name": "YRZ",
-    "percentage": 30
+    "percentage": 40
   }
 ]
