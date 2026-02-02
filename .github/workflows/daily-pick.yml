@@ -2,7 +2,7 @@ name: Daily Percentage Picker
 
 on:
   schedule:
-    - cron: "30 22 * * *"
+    - cron: "30 22 * * 0-5"
   workflow_dispatch:
 
 jobs:
