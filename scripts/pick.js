@@ -65,7 +65,7 @@ if (!chosen) {
 
 for (const p of people) {
     if (p.name === chosen.name) {
-        p.percentage -= 30;
+        p.percentage -= 10 * (people.length - 1);
     } else {
         p.percentage += 10;
     }
